@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { X } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface InfoPanelProps {
   isOpen?: boolean;
   onClose?: () => void;
+  onDelete?: (id: string) => void;
   title?: string;
   content?: string;
   tagId?: string;
@@ -15,6 +16,7 @@ interface InfoPanelProps {
 const InfoPanel: React.FC<InfoPanelProps> = ({
   isOpen = true,
   onClose = () => {},
+  onDelete = () => {},
   title = "Información del Concepto",
   content = "Esta es información detallada sobre el concepto seleccionado. Incluye una explicación completa del concepto y sus relaciones con otros conceptos en el mapa. El contenido puede ser bastante extenso y se desplazará si excede el espacio disponible en el panel.",
   tagId = "tag-1",
@@ -46,6 +48,13 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isVisible, onClose]);
+
+  const handleDelete = () => {
+    if (confirm("¿Está seguro que desea eliminar esta etiqueta?")) {
+      onDelete(tagId);
+      onClose();
+    }
+  };
 
   if (!isVisible) return null;
 
@@ -112,7 +121,14 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
 
         {/* Footer */}
         <div className="px-6 py-3 border-t bg-gray-50">
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <button
+              onClick={handleDelete}
+              className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium transition-colors flex items-center"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Eliminar
+            </button>
             <button
               onClick={onClose}
               className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-colors"

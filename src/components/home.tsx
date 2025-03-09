@@ -138,7 +138,7 @@ const Home: React.FC = () => {
     group: 0 | 1 | 2 | 3 | 4;
     content: string;
   }) => {
-    const id = `tag${tags.length + 1}`;
+    const id = `tag${Date.now()}`; // Usar timestamp para evitar IDs duplicados
     const position = {
       x: 50,
       y: 50 + tags.filter((tag) => tag.group === newTag.group).length * 70,
@@ -246,6 +246,7 @@ const Home: React.FC = () => {
         <InfoPanel
           isOpen={!!selectedTagId}
           onClose={handleCloseInfoPanel}
+          onDelete={handleTagDelete}
           title={selectedTag.label}
           tagId={selectedTag.id}
           tagType={selectedTag.type}
